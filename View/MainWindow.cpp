@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QPushButton>
 #include <QDebug>
+#include "MyGraphicsView.h"
 
 #include "ViewProject.h"
 
@@ -27,43 +28,40 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     characMenu->addAction(action2);
 
     // Création du QTextEdit
-    QTextEdit *textEdit = new QTextEdit(this);
+/*    QTextEdit *textEdit = new QTextEdit(this);*/
 
     // Création du QPushButton
-    QPushButton *button = new QPushButton("save", this);
+/*    QPushButton *button = new QPushButton("save", this);*/
 
     // Création du layout principal
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(menuBar);
-    mainLayout->addWidget(textEdit);
-    mainLayout->addWidget(button);  // Ajout du bouton au layout principal
+/*    mainLayout->addWidget(textEdit);
+    mainLayout->addWidget(button);  // Ajout du bouton au layout principal*/
     setLayout(mainLayout);
 
-    // Création de la fenêtre SDL
-
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+/*    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
        QString text = in.readAll();
         textEdit->setText(text);
         file.close();
-    }
+    }*/
 
     auto *b = new QGraphicsScene();
-    auto *c = new QGraphicsView();
+    auto *c = new MyGraphicsView();
     c->setScene(b);
 
-    b->addRect(5,8,9,6);
+    b->addRect(0,0,100,100);
     mainLayout->addWidget(c);
     setLayout(mainLayout);
 
     // Connexion du signal clicked() du bouton à une fonction lambda
-    connect(button, &QPushButton::clicked, [=]() {
+/*    connect(button, &QPushButton::clicked, [=]() {
         if (fileo.open(QIODevice::WriteOnly | QIODevice::Text)) {
             fileo.write(textEdit->toPlainText().toUtf8());
             fileo.close();
         }
-    });
+    });*/
 }
 
 MainWindow::~MainWindow() {
