@@ -18,6 +18,7 @@
 #include <QGraphicsView>
 
 #include "QGraphicsRectItem"
+#include "iostream"
 
 
 MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) {
@@ -30,8 +31,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     SlotController slotcontroller(slotmodel);
     slotcontroller.UpdateProject(file, slotmodel);
 
-    slotcontroller.GetCellVal(0,0,slotmodel);
-    slotcontroller.SetCellVal(0,1,slotmodel,5);
+    slotcontroller.SetCellVal(0,0,slotmodel, 1);
 
 // Création de la barre de menu
     QMenuBar *menuBar = new QMenuBar(this);
@@ -51,6 +51,15 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     mainLayout->addWidget(menuBar);
     setLayout(mainLayout);
 
+    QPushButton *button1 = new QPushButton("Sol");
+    QPushButton *button2 = new QPushButton("Rocher");
+    QVBoxLayout *leftLayout = new QVBoxLayout;
+    leftLayout->addWidget(button1);
+    leftLayout->addWidget(button2);
+    mainLayout->addLayout(leftLayout);
+
+
+
     const int tailleGrille = 5;
     const int tailleCellule = 95;
 
@@ -61,12 +70,38 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
 
 
 
+    connect(button1, &QPushButton::clicked, [view](){
+        view->setColorSelect(1);
+
+        std::cout<< view->getColorSelect() << std::endl;
+    });
+    connect(button2, &QPushButton::clicked, [view, slotcontroller, slotmodel](){
+        view->setColorSelect(2);
+        std::cout<< view->getColorSelect() << std::endl;
+    });
+
     //Juste les cellules
     for (int row = 0; row < tailleGrille; row++) {
         for (int col = 0; col < tailleGrille; col++) {
             QRectF rect(col * tailleCellule, row * tailleCellule, tailleCellule, tailleCellule);
             QGraphicsRectItem *cell = new QGraphicsRectItem(rect);
-            cell->setBrush(QBrush(Qt::darkGreen));
+            int x = atoi(&slotmodel.SlotData[col][row][4]);
+            std::cout<< x << std::endl;
+            switch (x) {
+                case 0:
+                    cell->setBrush(QBrush(Qt::darkGreen));
+                    break;
+                case 1:
+                    cell->setBrush(QBrush(Qt::darkGray));
+                    break;
+                case 2:
+                    cell->setBrush(QBrush(Qt::darkRed));
+                    break;
+                default:
+                    cell->setBrush(QBrush(Qt::darkGreen));
+                    break;
+            }
+
             scene->addItem(cell);
 
             if (row == 1 && col == 1) {

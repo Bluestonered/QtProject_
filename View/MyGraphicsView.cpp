@@ -16,4 +16,30 @@ void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
 
     std::cout << row << std::endl;
     std::cout << col << std::endl;
+
+
+}
+
+int MyGraphicsView::getCol() {
+    return col;
+}
+
+void MyGraphicsView::setCol(int colA) {
+    col = colA;
+}
+
+int MyGraphicsView::getRow() {
+    return row;
+}
+
+void MyGraphicsView::setRow(int rowA) {
+    row = rowA;
+}
+
+int MyGraphicsView::getColorSelect() {
+    return colorSelect;
+}
+
+void  MyGraphicsView::setColorSelect(int colorselect) {
+    colorSelect = colorselect;
 }
