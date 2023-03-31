@@ -2,15 +2,18 @@
 // Created by blue on 23/03/23.
 //
 
+#include <iostream>
 #include "MyGraphicsView.h"
 #include "QDebug"
 #include "QMouseEvent"
+#include "QGraphicsItem"
 
 void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
-    QGraphicsView::mousePressEvent(event);
+    QPointF pos = mapToScene(event->pos());
 
-    QPointF viewPos = event->pos();
-    qDebug() << "Position de la souris dans la scène : " << viewPos.x() << ", " << viewPos.y();
-    QPointF scenePos = mapToScene(event->pos());
-    qDebug() << "Position de la souris dans la scène glob : " << scenePos.x() << ", " << scenePos.y();
+    int row = pos.y() / 95;
+    int col = pos.x() / 95;
+
+    std::cout << row << std::endl;
+    std::cout << col << std::endl;
 }

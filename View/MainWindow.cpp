@@ -16,6 +16,7 @@
 #include <QPen>
 
 #include "ViewProject.h"
+#include "QGraphicsRectItem"
 
 
 MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) {
@@ -41,41 +42,44 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
 
 
 
-    // Création du QTextEdit
-/*    QTextEdit *textEdit = new QTextEdit(this);*/
-
-    // Création du QPushButton
-/*    QPushButton *button = new QPushButton("save", this);*/
-
     // Création du layout principal
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(menuBar);
-/*    mainLayout->addWidget(textEdit);
-    mainLayout->addWidget(button);  // Ajout du bouton au layout principal*/
     setLayout(mainLayout);
 
-/*    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-       QString text = in.readAll();
-        textEdit->setText(text);
-        file.close();
-    }*/
+    const int tailleGrille = 5;
+    const int tailleCellule = 95;
 
-    auto *b = new QGraphicsScene();
-    auto *c = new MyGraphicsView();
-    c->setScene(b);
-    c->setFixedSize(500,500);
-    b->addRect(0,0,1,1, QColor(255,255,255,255));
-    mainLayout->addWidget(c);
-    setLayout(mainLayout);
+    auto *scene = new QGraphicsScene();
+    auto *view = new MyGraphicsView();
+    view->setScene(scene);
+    view->setFixedSize(500, 500);
 
-    // Connexion du signal clicked() du bouton à une fonction lambda
-/*    connect(button, &QPushButton::clicked, [=]() {
-        if (fileo.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            fileo.write(textEdit->toPlainText().toUtf8());
-            fileo.close();
+
+
+    //Juste les cellules
+    for (int row = 0; row < tailleGrille; row++) {
+        for (int col = 0; col < tailleGrille; col++) {
+            QRectF rect(col * tailleCellule, row * tailleCellule, tailleCellule, tailleCellule);
+            QGraphicsRectItem *cell = new QGraphicsRectItem(rect);
+            cell->setBrush(QBrush(Qt::darkGreen));
+            scene->addItem(cell);
+
+            if (row == 1 && col == 1) {
+                //cell->setBrush(QBrush(Qt::red));
+            }
         }
-    });*/
+    }
+
+    // grille qui sépare les cellules pour rendre ça tout beau
+    for (int i = 0; i <= tailleGrille; i++) {
+        scene->addLine(i * tailleCellule, 0, i * tailleCellule, tailleCellule * tailleGrille, QPen(Qt::black));
+        scene->addLine(0, i * tailleCellule, tailleCellule * tailleGrille, i * tailleCellule, QPen(Qt::black));
+    }
+
+    mainLayout->addWidget(view);
+    setLayout(mainLayout);
+
 }
 
 MainWindow::~MainWindow() {
