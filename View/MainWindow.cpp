@@ -14,8 +14,9 @@
 #include "../Controller/SlotController.h"
 #include "../Model/SlotModel.h"
 #include <QPen>
+#include <QWidget>
+#include <QGraphicsView>
 
-#include "ViewProject.h"
 #include "QGraphicsRectItem"
 
 
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     SlotModel slotmodel;
     SlotController slotcontroller(slotmodel);
     slotcontroller.UpdateProject(file, slotmodel);
+
+    slotcontroller.GetCellVal(0,0,slotmodel);
+    slotcontroller.SetCellVal(0,1,slotmodel,5);
 
 // Création de la barre de menu
     QMenuBar *menuBar = new QMenuBar(this);

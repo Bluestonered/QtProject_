@@ -8,7 +8,6 @@
 #include <QWidget>
 #include <QString>
 #include <QFile>
-#include "ViewProject.h"
 
 class MainWindow : public QWidget {
 public:
@@ -16,7 +15,6 @@ public:
     ~MainWindow();
 
     QFile fileo;
-    ViewProject* sdlWindow;
 };
 
 

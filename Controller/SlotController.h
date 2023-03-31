@@ -14,6 +14,10 @@ public:
 
     void UpdateProject(QFile &a, SlotModel &SlotModel);
 
+    int GetCellVal(int col, int row, SlotModel &SlotModel);
+
+    void SetCellVal(int col, int row, SlotModel &SlotModel, int val);
+
 };
 
 

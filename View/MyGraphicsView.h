@@ -12,6 +12,7 @@ class MyGraphicsView :public QGraphicsView {
     void mousePressEvent(QMouseEvent *event) override;
 
 
+
 };
 
 
