@@ -13,10 +13,11 @@ class StartWindow : public QWidget {
 public:
     StartWindow();
     ~StartWindow();
-
-private:
     void onButton1Clicked();
     void onButton2Clicked();
+
+private:
+
     QLineEdit *projectNameLineEdit;
 };
 

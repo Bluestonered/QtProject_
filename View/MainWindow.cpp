@@ -9,23 +9,36 @@
 #include <QPushButton>
 #include <QDebug>
 #include "MyGraphicsView.h"
+#include <QBrush>
+#include "StartWindow.h"
+#include "../Controller/SlotController.h"
+#include "../Model/SlotModel.h"
+#include <QPen>
 
 #include "ViewProject.h"
 
 
 MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) {
 
+    StartWindow* p = new StartWindow();
     setFixedSize(712, 512);
     setWindowTitle(projectName);
 
-    // Création de la barre de menu
-    QMenuBar *menuBar = new QMenuBar(this);
+    SlotModel a;
+    SlotController r(a);
 
+// Création de la barre de menu
+    QMenuBar *menuBar = new QMenuBar(this);
     QMenu *characMenu = menuBar->addMenu("File");
     QAction *action1 = new QAction("New", this);
     QAction *action2 = new QAction("Open", this);
     characMenu->addAction(action1);
     characMenu->addAction(action2);
+
+    connect(action1, &QAction::triggered, p, &StartWindow::onButton1Clicked);
+    connect(action2, &QAction::triggered, p, &StartWindow::onButton2Clicked);
+
+
 
     // Création du QTextEdit
 /*    QTextEdit *textEdit = new QTextEdit(this);*/
@@ -50,8 +63,8 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     auto *b = new QGraphicsScene();
     auto *c = new MyGraphicsView();
     c->setScene(b);
-
-    b->addRect(0,0,100,100);
+    c->setFixedSize(500,500);
+    b->addRect(0,0,1,1, QColor(255,255,255,255));
     mainLayout->addWidget(c);
     setLayout(mainLayout);
 
