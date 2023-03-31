@@ -24,8 +24,9 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     setFixedSize(712, 512);
     setWindowTitle(projectName);
 
-    SlotModel a;
-    SlotController r(a);
+    SlotModel slotmodel;
+    SlotController slotcontroller(slotmodel);
+    slotcontroller.UpdateProject(file, slotmodel);
 
 // Création de la barre de menu
     QMenuBar *menuBar = new QMenuBar(this);

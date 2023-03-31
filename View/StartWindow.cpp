@@ -86,7 +86,6 @@ void StartWindow::onButton2Clicked()
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream in(&file);
-            file.close();
 
             MainWindow *newWindow = new MainWindow(QFileInfo(fileName).fileName(), fileName);
             newWindow->setAttribute(Qt::WA_DeleteOnClose); // Supprimer la fenêtre lorsque elle est fermée
