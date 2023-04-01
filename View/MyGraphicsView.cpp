@@ -30,7 +30,10 @@ void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
                 rectItem->setBrush(QBrush(Qt::darkGray));
                 break;
             case 2:
-                rectItem->setBrush(QBrush(Qt::darkRed));
+                rectItem->setBrush(QBrush(Qt::darkBlue));
+                break;
+            case 3:
+                rectItem->setBrush(QBrush(Qt::darkYellow));
                 break;
             default:
                 rectItem->setBrush(QBrush(Qt::darkGreen));

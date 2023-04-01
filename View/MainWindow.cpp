@@ -16,9 +16,10 @@
 #include <QPen>
 #include <QWidget>
 #include <QGraphicsView>
-
+#include <QLabel>
 #include "QGraphicsRectItem"
 #include "iostream"
+#include <QDialog>
 
 
 MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) {
@@ -34,19 +35,52 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     SlotController slotController(*slotModel);
     slotController.UpdateProject(file, *slotModel);
 
-    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel](int row, int col) {
+    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel, view](int row, int col) {
         std::cout << slotModel->SlotData.size() << std::endl;
-        slotController.SetCellVal(col, row, *slotModel, 1);
+        slotController.SetCellVal(col, row, *slotModel, view->getColorSelect());
+        view->update();
     });
 
 // Création de la barre de menu
     QMenuBar *menuBar = new QMenuBar(this);
-    QMenu *characMenu = menuBar->addMenu("File");
+    QMenu *BaseMenu = menuBar->addMenu("File");
     QAction *action1 = new QAction("New", this);
     QAction *action2 = new QAction("Open", this);
-    characMenu->addAction(action1);
-    characMenu->addAction(action2);
+    QMenu *ProjectMenu = menuBar->addMenu("Project");
+    QAction *actionA = new QAction("Save", this);
+    QAction *actionB = new QAction("Run", this);
+    BaseMenu->addAction(action1);
+    BaseMenu->addAction(action2);
+    ProjectMenu->addAction(actionA);
+    ProjectMenu->addAction(actionB);
 
+    connect(actionB, &QAction::triggered, [this]() {
+
+        QDialog *dialog = new QDialog(this);
+        dialog->setFixedSize(300, 150);
+        dialog->setWindowTitle("Désolé!");
+        QLabel *label = new QLabel(dialog);
+        label->setText("On ne peut pas lancer le projet pour le moment, \n j'implémenterais une fenêtre faite en SDL pour \n pouvoir jouer la scène! promis!");
+        QPushButton *buttonClose = new QPushButton(dialog);
+        buttonClose->setText("Close");
+        buttonClose->move(110, 90);
+        connect(buttonClose, &QPushButton::clicked, dialog, &QDialog::close);
+        dialog->exec();
+    });
+
+    connect(actionA, &QAction::triggered, [this]() {
+
+        QDialog *dialog = new QDialog(this);
+        dialog->setFixedSize(300, 150);
+        dialog->setWindowTitle("Save");
+        QLabel *label = new QLabel(dialog);
+        label->setText("Projet sauvegardé avec succès");
+        QPushButton *buttonClose = new QPushButton(dialog);
+        buttonClose->setText("Close");
+        buttonClose->move(110, 90);
+        connect(buttonClose, &QPushButton::clicked, dialog, &QDialog::close);
+        dialog->exec();
+    });
     connect(action1, &QAction::triggered, p, &StartWindow::onButton1Clicked);
     connect(action2, &QAction::triggered, p, &StartWindow::onButton2Clicked);
 
@@ -57,11 +91,17 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     mainLayout->addWidget(menuBar);
     setLayout(mainLayout);
 
-    QPushButton *button1 = new QPushButton("Sol");
-    QPushButton *button2 = new QPushButton("Rocher");
+    QPushButton *buttonSol = new QPushButton("Sol");
+    QPushButton *buttonRocher = new QPushButton("Rocher");
+    QPushButton *buttonEau = new QPushButton("eau");
+    QPushButton *buttonSable = new QPushButton("sable");
     QVBoxLayout *leftLayout = new QVBoxLayout;
-    leftLayout->addWidget(button1);
-    leftLayout->addWidget(button2);
+    leftLayout->addWidget(buttonSol);
+    leftLayout->addWidget(buttonRocher);
+    leftLayout->addWidget(buttonEau);
+    leftLayout->addWidget(buttonSable);
+    leftLayout->setAlignment(Qt::AlignLeft);
+    leftLayout->setAlignment(Qt::AlignCenter);
     mainLayout->addLayout(leftLayout);
 
 
@@ -73,13 +113,21 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     view->setScene(scene);
     view->setFixedSize(500, 500);
 
-    connect(button1, &QPushButton::clicked, [view](){
-        view->setColorSelect(1);
+    connect(buttonSol, &QPushButton::clicked, [view](){
+        view->setColorSelect(0);
 
         std::cout<< view->getColorSelect() << std::endl;
     });
-    connect(button2, &QPushButton::clicked, [view, slotController, slotModel](){
+    connect(buttonRocher, &QPushButton::clicked, [view, slotController, slotModel](){
+        view->setColorSelect(1);
+        std::cout<< view->getColorSelect() << std::endl;
+    });
+    connect(buttonEau, &QPushButton::clicked, [view, slotController, slotModel](){
         view->setColorSelect(2);
+        std::cout<< view->getColorSelect() << std::endl;
+    });
+    connect(buttonSable, &QPushButton::clicked, [view, slotController, slotModel](){
+        view->setColorSelect(3);
         std::cout<< view->getColorSelect() << std::endl;
     });
 
@@ -97,7 +145,10 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
                     cell->setBrush(QBrush(Qt::darkGray));
                     break;
                 case 2:
-                    cell->setBrush(QBrush(Qt::darkRed));
+                    cell->setBrush(QBrush(Qt::darkBlue));
+                    break;
+                case 3:
+                    cell->setBrush(QBrush(Qt::darkYellow));
                     break;
                 default:
                     cell->setBrush(QBrush(Qt::darkGreen));
