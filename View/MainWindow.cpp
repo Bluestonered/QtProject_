@@ -34,10 +34,11 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     SlotModel *slotModel = new SlotModel();
     SlotController slotController(*slotModel);
     slotController.UpdateProject(file,*slotModel);
+    file.close();
 
-    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel, view, &file](int row, int col) {
+    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel, view](int row, int col) {
         std::cout << slotModel->SlotData.size() << std::endl;
-        std::cout << &file << std::endl;
+        //std::cout << &file << std::endl;
         slotController.SetCellVal(col, row, *slotModel, view->getColorSelect());
     });
 
