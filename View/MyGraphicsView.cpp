@@ -14,8 +14,29 @@ void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
     int row = pos.y() / 95;
     int col = pos.x() / 95;
 
-    std::cout << row << std::endl;
-    std::cout << col << std::endl;
+    setCol(col);
+    setRow(row);
+
+    emit cellClicked(row, col);
+
+
+    QGraphicsRectItem *rectItem = dynamic_cast<QGraphicsRectItem*>(scene()->itemAt(pos, QTransform()));
+    if (rectItem != nullptr) {
+        switch (colorSelect) {
+            case 0:
+                rectItem->setBrush(QBrush(Qt::darkGreen));
+                break;
+            case 1:
+                rectItem->setBrush(QBrush(Qt::darkGray));
+                break;
+            case 2:
+                rectItem->setBrush(QBrush(Qt::darkRed));
+                break;
+            default:
+                rectItem->setBrush(QBrush(Qt::darkGreen));
+                break;
+        }
+    }
 
 
 }

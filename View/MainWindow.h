@@ -8,8 +8,11 @@
 #include <QWidget>
 #include <QString>
 #include <QFile>
+#include "../Controller/SlotController.h"
+#include "../Model/SlotModel.h"
 
 class MainWindow : public QWidget {
+
 public:
     MainWindow(QString projectName, QFile file);
     ~MainWindow();

@@ -8,7 +8,8 @@
 
 SlotController::SlotController(SlotModel &SlotModel) {
 
-
+if (SlotModel.SlotData.size() == NULL)
+{
     for (int i = 0; i < 5; ++i) {
         std::vector<std::string> init;
         for (int j = 0; j < 5; ++j) {
@@ -16,6 +17,8 @@ SlotController::SlotController(SlotModel &SlotModel) {
         }
         SlotModel.SlotData.push_back(init);
     }
+}
+
 
     //je le print vite fais
     for (const auto& row : SlotModel.SlotData) {
@@ -43,18 +46,14 @@ void SlotController::UpdateProject(QFile &file, SlotModel &SlotModel) {
 }
 
 int SlotController::GetCellVal(int col, int row, SlotModel &SlotModel) {
-    if (col >= 0 && col < 5 && row >= 0 && row < 5) {
         std::string cell = SlotModel.SlotData[col][row];
 
         return atoi(&cell[4]);
-    }
-    return 0;
 }
 
-void SlotController::SetCellVal(int col, int row, SlotModel &SlotModel, int val) {
-    if (col >= 0 && col < 5 && row >= 0 && row < 5) {
-        SlotModel.SlotData[col][row][4] = std::to_string(val)[0];
-    }
+void SlotController::SetCellVal(int col, int row, SlotModel SlotModel, int val) {
+
+        SlotModel.SlotData[row][col][4] = std::to_string(val)[0];
 
     for (const auto& row : SlotModel.SlotData) {
         for (const auto& cell : row) {

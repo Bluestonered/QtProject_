@@ -27,11 +27,19 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     setFixedSize(712, 512);
     setWindowTitle(projectName);
 
-    SlotModel slotmodel;
-    SlotController slotcontroller(slotmodel);
-    slotcontroller.UpdateProject(file, slotmodel);
+    auto *scene = new QGraphicsScene();
+    auto *view = new MyGraphicsView();
 
-    slotcontroller.SetCellVal(0,0,slotmodel, 1);
+    SlotModel slotModel;
+    SlotController slotController(slotModel);
+    slotController.UpdateProject(file, slotModel);
+
+    slotController.SetCellVal(0, 0, slotModel, 2);
+
+    QObject::connect(view, &MyGraphicsView::cellClicked, [slotModel, &slotController](int row, int col) {
+        std::cout << slotModel.SlotData.size() << std::endl;
+        slotController.SetCellVal(col, row, slotModel, 1);
+    });
 
 // Création de la barre de menu
     QMenuBar *menuBar = new QMenuBar(this);
@@ -63,19 +71,16 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     const int tailleGrille = 5;
     const int tailleCellule = 95;
 
-    auto *scene = new QGraphicsScene();
-    auto *view = new MyGraphicsView();
+
     view->setScene(scene);
     view->setFixedSize(500, 500);
-
-
 
     connect(button1, &QPushButton::clicked, [view](){
         view->setColorSelect(1);
 
         std::cout<< view->getColorSelect() << std::endl;
     });
-    connect(button2, &QPushButton::clicked, [view, slotcontroller, slotmodel](){
+    connect(button2, &QPushButton::clicked, [view, slotController, slotModel](){
         view->setColorSelect(2);
         std::cout<< view->getColorSelect() << std::endl;
     });
@@ -85,8 +90,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
         for (int col = 0; col < tailleGrille; col++) {
             QRectF rect(col * tailleCellule, row * tailleCellule, tailleCellule, tailleCellule);
             QGraphicsRectItem *cell = new QGraphicsRectItem(rect);
-            int x = atoi(&slotmodel.SlotData[col][row][4]);
-            std::cout<< x << std::endl;
+            int x = atoi(&slotModel.SlotData[col][row][4]);
             switch (x) {
                 case 0:
                     cell->setBrush(QBrush(Qt::darkGreen));
@@ -101,12 +105,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
                     cell->setBrush(QBrush(Qt::darkGreen));
                     break;
             }
-
             scene->addItem(cell);
-
-            if (row == 1 && col == 1) {
-                //cell->setBrush(QBrush(Qt::red));
-            }
         }
     }
 
@@ -115,6 +114,8 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
         scene->addLine(i * tailleCellule, 0, i * tailleCellule, tailleCellule * tailleGrille, QPen(Qt::black));
         scene->addLine(0, i * tailleCellule, tailleCellule * tailleGrille, i * tailleCellule, QPen(Qt::black));
     }
+
+
 
     mainLayout->addWidget(view);
     setLayout(mainLayout);

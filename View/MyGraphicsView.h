@@ -7,8 +7,11 @@
 
 #include <QGraphicsView>
 #include "../Controller/SlotController.h"
+#include "../Model/SlotModel.h"
 
 class MyGraphicsView :public QGraphicsView {
+
+Q_OBJECT
 
     void mousePressEvent(QMouseEvent *event) override;
 
@@ -17,6 +20,9 @@ private:
     int col;
     int colorSelect;
 
+signals:
+    void cellClicked(int row, int col);
+
 public:
     int getRow();
     void setRow(int row);
@@ -24,8 +30,6 @@ public:
     void setCol(int col);
     int getColorSelect();
     void setColorSelect(int colorselect);
-
-    void UpdateColor();
 
 
 };
