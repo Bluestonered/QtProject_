@@ -4,3 +4,6 @@
 
 #include "SlotModel.h"
 
+SlotModel::SlotModel() {
+
+}

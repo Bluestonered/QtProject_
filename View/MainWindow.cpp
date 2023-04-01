@@ -30,15 +30,13 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     auto *scene = new QGraphicsScene();
     auto *view = new MyGraphicsView();
 
-    SlotModel slotModel;
-    SlotController slotController(slotModel);
-    slotController.UpdateProject(file, slotModel);
+    SlotModel *slotModel = new SlotModel();
+    SlotController slotController(*slotModel);
+    slotController.UpdateProject(file, *slotModel);
 
-    slotController.SetCellVal(0, 0, slotModel, 2);
-
-    QObject::connect(view, &MyGraphicsView::cellClicked, [slotModel, &slotController](int row, int col) {
-        std::cout << slotModel.SlotData.size() << std::endl;
-        slotController.SetCellVal(col, row, slotModel, 1);
+    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel](int row, int col) {
+        std::cout << slotModel->SlotData.size() << std::endl;
+        slotController.SetCellVal(col, row, *slotModel, 1);
     });
 
 // Création de la barre de menu
@@ -90,7 +88,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
         for (int col = 0; col < tailleGrille; col++) {
             QRectF rect(col * tailleCellule, row * tailleCellule, tailleCellule, tailleCellule);
             QGraphicsRectItem *cell = new QGraphicsRectItem(rect);
-            int x = atoi(&slotModel.SlotData[col][row][4]);
+            int x = atoi(&slotModel->SlotData[col][row][4]);
             switch (x) {
                 case 0:
                     cell->setBrush(QBrush(Qt::darkGreen));

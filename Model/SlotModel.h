@@ -11,6 +11,8 @@
 
 class SlotModel {
     public:
+
+    SlotModel();
     std::vector<std::vector<std::string>> SlotData;
 };
 
