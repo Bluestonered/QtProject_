@@ -33,12 +33,12 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
 
     SlotModel *slotModel = new SlotModel();
     SlotController slotController(*slotModel);
-    slotController.UpdateProject(file, *slotModel);
+    slotController.UpdateProject(file,*slotModel);
 
-    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel, view](int row, int col) {
+    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel, view, &file](int row, int col) {
         std::cout << slotModel->SlotData.size() << std::endl;
+        std::cout << &file << std::endl;
         slotController.SetCellVal(col, row, *slotModel, view->getColorSelect());
-        view->update();
     });
 
 // Création de la barre de menu
@@ -74,7 +74,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
         dialog->setFixedSize(300, 150);
         dialog->setWindowTitle("Save");
         QLabel *label = new QLabel(dialog);
-        label->setText("Projet sauvegardé avec succès");
+        label->setText("Projet sauvegardé avec succès\n(ne fonctionne pas malheureusement)");
         QPushButton *buttonClose = new QPushButton(dialog);
         buttonClose->setText("Close");
         buttonClose->move(110, 90);
@@ -91,7 +91,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     mainLayout->addWidget(menuBar);
     setLayout(mainLayout);
 
-    QPushButton *buttonSol = new QPushButton("Sol");
+    QPushButton *buttonSol = new QPushButton("Herbe");
     QPushButton *buttonRocher = new QPushButton("Rocher");
     QPushButton *buttonEau = new QPushButton("eau");
     QPushButton *buttonSable = new QPushButton("sable");

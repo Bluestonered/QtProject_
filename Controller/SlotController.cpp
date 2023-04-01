@@ -45,6 +45,35 @@ void SlotController::UpdateProject(QFile &file, SlotModel &SlotModel) {
 
 }
 
+SlotModel *SlotController::InitProject(QFile &file)
+{
+    SlotModel slotModel;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        std::cout<< "MWAMAW" << std::endl;
+        return &slotModel;
+    }
+
+    QTextStream in(&file);
+    QString line = in.readLine();
+
+    while (!line.isNull()) {
+        QStringList items = line.split("|");
+        int row = items[0].toInt();
+        QStringList cells = items[1].split(";");
+
+        for (int col = 0; col < cells.size(); col++) {
+            QStringList cellValues = cells[col].split(":");
+            int value = cellValues[1].toInt();
+            slotModel.SlotData[row][col] = value;
+        }
+
+        line = in.readLine();
+    }
+
+    file.close();
+    return &slotModel;
+}
+
 int SlotController::GetCellVal(int col, int row, SlotModel &SlotModel) {
         std::string cell = SlotModel.SlotData[col][row];
 
