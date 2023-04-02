@@ -74,6 +74,11 @@ void StartWindow::onButton1Clicked()
             NewWindow->show();
             this->close();
         }
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        SlotModel slotModel;
+        SlotController slotController(slotModel);
+        slotController.NewProject(file,slotModel);
+        file.close();
     }
 }
 

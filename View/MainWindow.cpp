@@ -20,6 +20,10 @@
 #include "QGraphicsRectItem"
 #include "iostream"
 #include <QDialog>
+#include <QDir>
+
+#include <vector>
+#include <utility>
 
 
 MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) {
@@ -33,14 +37,17 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
 
     SlotModel *slotModel = new SlotModel();
     SlotController slotController(*slotModel);
-    slotController.UpdateProject(file,*slotModel);
+    slotController.InitProject(file);
     file.close();
 
-    QObject::connect(view, &MyGraphicsView::cellClicked, [&slotController, slotModel, view](int row, int col) {
-        std::cout << slotModel->SlotData.size() << std::endl;
-        //std::cout << &file << std::endl;
-        slotController.SetCellVal(col, row, *slotModel, view->getColorSelect());
+
+
+
+
+    QObject::connect(view, &MyGraphicsView::cellClicked, [](int row, int col) {
+
     });
+
 
 // Création de la barre de menu
     QMenuBar *menuBar = new QMenuBar(this);
