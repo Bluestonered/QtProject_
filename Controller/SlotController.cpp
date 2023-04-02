@@ -8,7 +8,7 @@
 
 SlotController::SlotController(SlotModel &SlotModel) {
 
-if (SlotModel.SlotData.size() == NULL)
+/*if (SlotModel.SlotData.size() == NULL)
 {
     for (int i = 0; i < 5; ++i) {
         std::vector<std::string> init;
@@ -17,26 +17,25 @@ if (SlotModel.SlotData.size() == NULL)
         }
         SlotModel.SlotData.push_back(init);
     }
-}
+}*/
 
 
     //je le print vite fais
-    for (const auto& row : SlotModel.SlotData) {
+/*    for (const auto& row : SlotModel.SlotData) {
         for (const auto& cell : row) {
             std::cout << cell << " ";
         }
-        std::cout << std::endl;
-    }
+    }*/
 }
 
-void SlotController::NewProject(QFile &file, SlotModel &SlotModel) {
+void SlotController::NewProject(QFile &file, SlotModel &slotModel) {
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         std::cout << "ERREUR PAS D'ACCES AU FICHIER" << endl;
     }
     QTextStream out(&file);
-    for (const auto &row : SlotModel.SlotData) {
+    for (const auto &row : slotModel.SlotData) {
         for (const auto &cell : row) {
             out << QString::fromStdString(cell) << " ";
         }
@@ -45,22 +44,59 @@ void SlotController::NewProject(QFile &file, SlotModel &SlotModel) {
 
 }
 
-void SlotController::InitProject(QFile &file)
+void SlotController::UpdateProject(QFile &file, SlotModel &slotModel) {
+
+    QTextStream out(&file);
+    for (const auto &row : slotModel.SlotData) {
+        for (const auto &cell : row) {
+            out << QString::fromStdString(cell) << " ";
+        }
+        out << endl;
+    }
+}
+
+SlotModel SlotController::InitProject(QFile &file)
 {
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         std::cout << "Impossible d'ouvrir le fichier." << std::endl;
     }
 
     QTextStream in(&file);
-    QString line = in.readLine();
+    QString line;
 
-    while (!line.isNull()) {
-        std::cout << line.toStdString() << std::endl;
+    // Initialisation du tableau de vecteurs
+    const int numVectors = 5;
+    std::vector<std::vector<std::string>> donneededonnee;
+    QStringList items;
+    // Lecture des données du fichier texte
+    while (!in.atEnd()) {
         line = in.readLine();
+        items = line.split(" ");
+        std::vector<std::string> donnee;
+        for (const auto& item : items) {
+            std::cout << item.toStdString() << std::endl;
+            donnee.push_back(item.toStdString());
+        }
+        donneededonnee.push_back(donnee);
     }
 
-    file.close();
+    // PRINT
+    for (const auto& vec : donneededonnee) {
+        for (const auto& str : vec) {
+            std::cout << str << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    SlotModel slotModel;
+    slotModel.SlotData = donneededonnee;
+
+    return slotModel;
 }
+
+
+
+
 
 
 

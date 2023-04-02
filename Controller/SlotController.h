@@ -12,9 +12,11 @@ class SlotController {
 public:
     SlotController(SlotModel &SlotModel);
 
-    void NewProject(QFile &a, SlotModel &SlotModel);
+    void NewProject(QFile &a, SlotModel &slotModel);
 
-    void InitProject(QFile &a);
+    void UpdateProject(QFile &a, SlotModel &slotModel);
+
+    SlotModel InitProject(QFile &a);
 
     int GetCellVal(int col, int row, SlotModel &SlotModel);
 
