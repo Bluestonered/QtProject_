@@ -14,7 +14,7 @@ public:
 
     void NewProject(QFile &a, SlotModel &SlotModel);
 
-    void InitProject(QFile &a);
+    SlotModel InitProject(QFile &a);
 
     int GetCellVal(int col, int row, SlotModel &SlotModel);
 

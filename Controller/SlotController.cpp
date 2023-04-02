@@ -45,22 +45,47 @@ void SlotController::NewProject(QFile &file, SlotModel &SlotModel) {
 
 }
 
-void SlotController::InitProject(QFile &file)
+SlotModel SlotController::InitProject(QFile &file)
 {
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         std::cout << "Impossible d'ouvrir le fichier." << std::endl;
     }
 
     QTextStream in(&file);
-    QString line = in.readLine();
+    QString line;
 
-    while (!line.isNull()) {
-        std::cout << line.toStdString() << std::endl;
+    // Initialisation du tableau de vecteurs
+    const int numVectors = 5;
+    std::vector<std::vector<std::string>> donneededonnee;
+    QStringList items;
+    // Lecture des données du fichier texte
+    while (!in.atEnd()) {
         line = in.readLine();
+        if (line.trimmed().isEmpty() || line.startsWith("#")) {
+            continue; // Ignorer les lignes vides et les commentaires
+        }
+        items = line.split(" ");
+        std::vector<std::string> donnee;
+        for (const auto& item : items) {
+            std::cout << item.toStdString() << std::endl;
+            donnee.push_back(item.toStdString());
+        }
+        donneededonnee.push_back(donnee);
     }
 
-    file.close();
+    // Affichage des données stockées dans le tableau de vecteurs
+    for (const auto& vec : donneededonnee) {
+        for (const auto& str : vec) {
+            std::cout << str << " ";
+        }
+        std::cout << std::endl;
+    }
+    SlotModel slotModel;
+    slotModel.SlotData = donneededonnee;
+    return slotModel;
 }
+
+
 
 
 

@@ -35,18 +35,13 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     auto *scene = new QGraphicsScene();
     auto *view = new MyGraphicsView();
 
-    SlotModel *slotModel = new SlotModel();
-    SlotController slotController(*slotModel);
-    slotController.InitProject(file);
+    SlotModel slotModel;
+    SlotController slotController(slotModel);
+    slotModel = slotController.InitProject(file);
+
     file.close();
 
 
-
-
-
-    QObject::connect(view, &MyGraphicsView::cellClicked, [](int row, int col) {
-
-    });
 
 
 // Création de la barre de menu
@@ -121,6 +116,8 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
     view->setScene(scene);
     view->setFixedSize(500, 500);
 
+
+
     connect(buttonSol, &QPushButton::clicked, [view](){
         view->setColorSelect(0);
 
@@ -139,12 +136,29 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
         std::cout<< view->getColorSelect() << std::endl;
     });
 
+    QObject::connect(view, &MyGraphicsView::cellClicked, [projectName, view](int row, int col) {
+        //slotController.SetCellVal(row, col, slotModel, colorSelect); //Ce que j'aurais aimé faire pour que ça marche mais ça veux pas donc je pleure
+
+        QFile file(QDir::homePath() + "/Documents/ProjectQT/" + projectName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            std::cout << "Impossible d'ouvrir le fichier." << std::endl;
+            return; // sortir de la fonction
+        }
+
+/*        SlotModel model;
+        SlotController controller(model);
+        //controller.InitProject(file);
+        controller.SetCellVal(row, col, model, view->getColorSelect());
+        controller.UpdateProject(file,model);*/
+
+    });
+
     //Juste les cellules
     for (int row = 0; row < tailleGrille; row++) {
         for (int col = 0; col < tailleGrille; col++) {
             QRectF rect(col * tailleCellule, row * tailleCellule, tailleCellule, tailleCellule);
             QGraphicsRectItem *cell = new QGraphicsRectItem(rect);
-            int x = atoi(&slotModel->SlotData[col][row][4]);
+            int x = atoi(&slotModel.SlotData[col][row][4]);
             switch (x) {
                 case 0:
                     cell->setBrush(QBrush(Qt::darkGreen));
