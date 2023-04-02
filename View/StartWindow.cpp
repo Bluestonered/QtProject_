@@ -85,7 +85,7 @@ void StartWindow::onButton1Clicked()
 
 void StartWindow::onButton2Clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "Open Project", QDir::homePath() + "/Documents/ProjectQT", "Text Files (*.txt)");
+    QString fileName = QFileDialog::getOpenFileName(this, "Open Project", QDir::homePath() + "/Documents/ProjectQT", "");
 
     if (!fileName.isEmpty()) {
         QFile file(fileName);
