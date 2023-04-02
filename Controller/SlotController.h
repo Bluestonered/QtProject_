@@ -14,11 +14,13 @@ public:
 
     void NewProject(QFile &a, SlotModel &SlotModel);
 
+    void UpdateProject(QFile &a, SlotModel &SlotModel);
+
     SlotModel InitProject(QFile &a);
 
     int GetCellVal(int col, int row, SlotModel &SlotModel);
 
-    void SetCellVal(int col, int row, SlotModel SlotModel, int val);
+    SlotModel SetCellVal(int col, int row, SlotModel SlotModel, int val);
 
 };
 

@@ -26,7 +26,7 @@
 #include <utility>
 
 
-MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) {
+MainWindow::MainWindow(QString projectName, QFile file,int New): fileo(file.fileName()) {
 
     StartWindow* p = new StartWindow();
     setFixedSize(712, 512);
@@ -37,10 +37,38 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
 
     SlotModel slotModel;
     SlotController slotController(slotModel);
-    slotModel = slotController.InitProject(file);
-
+    if(New == 1)
+    {
+        slotModel = slotController.InitProject(file);
+    }
     file.close();
 
+
+
+    QObject::connect(view, &MyGraphicsView::cellClicked, [projectName, view](int row, int col) {
+        //slotController.SetCellVal(row, col, slotModel, colorSelect); //Ce que j'aurais aimé faire pour que ça marche mais ça veux pas donc je pleure
+
+        QFile file(QDir::homePath() + "/Documents/ProjectQT/" + projectName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            std::cout << "Impossible d'ouvrir le fichier." << std::endl;
+            return; // sortir de la fonction
+        }
+
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            qDebug() << line;
+        }
+        SlotModel model;
+        SlotController controller(model);
+        file.close();
+        model = controller.InitProject(file);
+        model = controller.SetCellVal(row, col, model, view->getColorSelect());
+        file.close();
+        controller.UpdateProject(file,model);
+
+        file.close();
+    });
 
 
 
@@ -136,22 +164,7 @@ MainWindow::MainWindow(QString projectName, QFile file): fileo(file.fileName()) 
         std::cout<< view->getColorSelect() << std::endl;
     });
 
-    QObject::connect(view, &MyGraphicsView::cellClicked, [projectName, view](int row, int col) {
-        //slotController.SetCellVal(row, col, slotModel, colorSelect); //Ce que j'aurais aimé faire pour que ça marche mais ça veux pas donc je pleure
 
-        QFile file(QDir::homePath() + "/Documents/ProjectQT/" + projectName);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            std::cout << "Impossible d'ouvrir le fichier." << std::endl;
-            return; // sortir de la fonction
-        }
-
-/*        SlotModel model;
-        SlotController controller(model);
-        //controller.InitProject(file);
-        controller.SetCellVal(row, col, model, view->getColorSelect());
-        controller.UpdateProject(file,model);*/
-
-    });
 
     //Juste les cellules
     for (int row = 0; row < tailleGrille; row++) {

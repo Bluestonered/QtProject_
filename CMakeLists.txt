@@ -12,12 +12,9 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-
 add_executable(QtProject main.cpp View/StartWindow.cpp View/MainWindow.cpp View/MyGraphicsView.cpp Controller/SlotController.cpp Model/SlotModel.cpp)
 target_link_libraries(QtProject
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
-        ${SDL2_LIBRARIES})
+        )

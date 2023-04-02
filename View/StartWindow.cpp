@@ -70,7 +70,7 @@ void StartWindow::onButton1Clicked()
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream out(&file);
             file.close();
-            MainWindow *NewWindow = new MainWindow(QFileInfo(fileName).fileName(), fileName);
+            MainWindow *NewWindow = new MainWindow(QFileInfo(fileName).fileName(), fileName, 0);
             NewWindow->show();
             this->close();
         }
@@ -92,9 +92,10 @@ void StartWindow::onButton2Clicked()
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream in(&file);
 
-            MainWindow *newWindow = new MainWindow(QFileInfo(fileName).fileName(), fileName);
+            MainWindow *newWindow = new MainWindow(QFileInfo(fileName).fileName(), fileName, 1);
             newWindow->setAttribute(Qt::WA_DeleteOnClose); // Supprimer la fenêtre lorsque elle est fermée
             newWindow->show();
+            file.close();
             this->close();
         }
     }

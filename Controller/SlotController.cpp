@@ -29,6 +29,21 @@ if (SlotModel.SlotData.size() == NULL)
     }
 }
 
+void SlotController::UpdateProject(QFile &file, SlotModel &SlotModel) {
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        std::cout << "ERREUR PAS D'ACCES AU FICHIER" << endl;
+    }
+    QTextStream out(&file);
+    for (const auto &row : SlotModel.SlotData) {
+        for (const auto &cell : row) {
+            out << QString::fromStdString(cell) << " ";
+        }
+        out << endl;
+    }
+}
+
 void SlotController::NewProject(QFile &file, SlotModel &SlotModel) {
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -67,7 +82,7 @@ SlotModel SlotController::InitProject(QFile &file)
         items = line.split(" ");
         std::vector<std::string> donnee;
         for (const auto& item : items) {
-            std::cout << item.toStdString() << std::endl;
+/*            std::cout << item.toStdString() << std::endl;*/
             donnee.push_back(item.toStdString());
         }
         donneededonnee.push_back(donnee);
@@ -91,11 +106,10 @@ SlotModel SlotController::InitProject(QFile &file)
 
 int SlotController::GetCellVal(int col, int row, SlotModel &SlotModel) {
         std::string cell = SlotModel.SlotData[col][row];
-
         return atoi(&cell[4]);
 }
 
-void SlotController::SetCellVal(int col, int row, SlotModel SlotModel, int val) {
+SlotModel SlotController::SetCellVal(int col, int row, SlotModel SlotModel, int val) {
 
         SlotModel.SlotData[row][col][4] = std::to_string(val)[0];
 
@@ -105,4 +119,8 @@ void SlotController::SetCellVal(int col, int row, SlotModel SlotModel, int val) 
         }
         std::cout << std::endl;
     }
+
+    return SlotModel;
+
+
 }

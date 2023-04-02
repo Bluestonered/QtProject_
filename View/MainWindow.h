@@ -14,7 +14,7 @@
 class MainWindow : public QWidget {
 
 public:
-    MainWindow(QString projectName, QFile file);
+    MainWindow(QString projectName, QFile file, int New);
     ~MainWindow();
 
     QFile fileo;
