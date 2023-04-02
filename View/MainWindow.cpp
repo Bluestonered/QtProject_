@@ -105,7 +105,7 @@ MainWindow::MainWindow(QString projectName, QFile file,int New): fileo(file.file
         dialog->setFixedSize(300, 150);
         dialog->setWindowTitle("Save");
         QLabel *label = new QLabel(dialog);
-        label->setText("Projet sauvegardé avec succès\n(ne fonctionne pas malheureusement)");
+        label->setText("Projet sauvegardé avec succès\n(ne sert à rien car le projet est auto save)");
         QPushButton *buttonClose = new QPushButton(dialog);
         buttonClose->setText("Close");
         buttonClose->move(110, 90);
